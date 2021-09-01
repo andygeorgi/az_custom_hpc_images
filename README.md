@@ -78,5 +78,5 @@ packer build \
   -var "resource_group=$imageResourceGroup" \
   -var "HPCscripts=$HPCscripts" \
   -var "RHEL7MinorVersion=$RHEL7MinorVersion" \
-  Packer-CustomHPCRHEL7.json
+  Packer-CustomHPC-RHEL7.json
 ```
