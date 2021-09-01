@@ -51,7 +51,7 @@ subscriptionID=$(az account show --query id --output tsv)
 # Name of the Service Principal to be created
 servicePrincipalName="SPpacker"
 
-# Specify RHEL 7 minor version to be used (6|7|8|9)
+# Specify RHEL 7 minor version to be used (6|7)
 RHEL7MinorVersion=7
 
 # Path for HPC scripts (see https://github.com/Azure/azhpc-images to get the right path for the selected image)
