@@ -18,11 +18,7 @@ CycleCloud 8.1.0-1275
     {
       "azure-cli": "2.27.1",
       "azure-cli-core": "2.27.1",
-      "azure-cli-telemetry": "1.0.6",
-      "extensions": {
-        "image-copy-extension": "0.2.8",
-        "ssh": "0.1.5"
-      }
+      "azure-cli-telemetry": "1.0.6"
     }
 ```
 ```bash
