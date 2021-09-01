@@ -17,7 +17,7 @@
 
     "azure_tags": {
         "source": "PackerVmImageBuilder",
-        "baseosimg": "RedHat:RHEL:7.7:latest"
+        "baseosimg": "RedHat:RHEL:7.{{user `RHEL7MinorVersion`}}:latest"
     },
 
     "location": "westeurope",
