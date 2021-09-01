@@ -1,4 +1,4 @@
-# Custom HPC image for Azure based on RHEL 7.7
+# Custom HPC image for Azure based on RHEL 7
 
 ## Tools
 ```bash
@@ -24,33 +24,36 @@ Copyright (C) 2016 Free Software Foundation, Inc.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html
 ```
 
-## Login and set environment specific variables
+## Login and set environment specific variables (to be customized to own needs)
 
 ```bash
 az login
 ```
 ```bash
-# destination image resource group
+# Destination image resource group
 imageResourceGroup="RGHPCImages"
 
-# location (see possible locations in main docs)
+# Location (see possible locations in main docs)
 location="westeurope"
 
-# your subscription name and ID
+# Your subscription name and ID
 subscriptionName=$(az account show --query id --output tsv)
 subscriptionID=$(az account show --query id --output tsv)
 
 # Name of the Service Principal to be created
 servicePrincipalName="SPpacker"
 
-#path for HPC scripts (see https://github.com/Azure/azhpc-images to get the right path for the selected image)
-HPCscripts="centos/centos-7.x/centos-7.7-hpc/"
+# Specify RHEL 7 minor version to be used (6|7|8|9)
+RHEL7MinorVersion=7
+
+# Path for HPC scripts (see https://github.com/Azure/azhpc-images to get the right path for the selected image)
+HPCscripts="centos/centos-7.x/centos-7.${RHEL7MinorVersion}-hpc/"
 ```
 
 ## Preperation steps
 
 ```bash
-# create resource group if it not already exists
+# Create resource group if it not already exists
 az group create -n $imageResourceGroup -l $location
 ```
 
@@ -62,4 +65,18 @@ az ad sp create-for-rbac --name "http://$servicePrincipalName" --role Contributo
 servicePrincipalPassword=$(awk '{print $4}' SPpackerCredentials.out)
 servicePrincipalAppId=$(awk '{print $1}' SPpackerCredentials.out)
 servicePrincipalTenant=$(awk '{print $5}' SPpackerCredentials.out)
+```
+
+## Start Packer build prcocess
+
+```bash
+packer build \
+  -var "client_id=$servicePrincipalAppId" \
+  -var "client_secret=$servicePrincipalPassword" \
+  -var "tenant_id=$servicePrincipalTenant" \
+  -var "subscription_id=$subscriptionID" \
+  -var "resource_group=$imageResourceGroup" \
+  -var "HPCscripts=$HPCscripts" \
+  -var "RHEL7MinorVersion=$RHEL7MinorVersion" \
+  Packer-CustomHPCRHEL7.json
 ```
