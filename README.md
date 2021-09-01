@@ -1,5 +1,17 @@
 # Custom HPC image for Azure based on RHEL 7
 
+## Tested with ...
+
+```bash
+~$ cat /etc/redhat-release
+Red Hat Enterprise Linux Server release 7.7 (Maipo)
+```
+
+```bash
+~$ cyclecloud --version
+CycleCloud 8.1.0-1275
+```
+
 ## Tools
 ```bash
 ~$ az version
