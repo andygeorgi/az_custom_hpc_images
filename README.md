@@ -15,7 +15,7 @@ Red Hat Enterprise Linux Server release 7.9 (Maipo)
 CycleCloud 8.1.0-1275
 ```
 
-## Tools
+## Tools used ...
 ```bash
 ~$ az version
     {
@@ -62,7 +62,7 @@ servicePrincipalName="SPpacker"
 
 # Distribution specific configuration
 # RHEL (CentOS and Ubuntu coming soon ...)
-Distribution=RHEL
+Distribution="RHEL"
 
 # Currently RHEL7 only
 MajorVersion=7
