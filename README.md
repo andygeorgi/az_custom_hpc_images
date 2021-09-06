@@ -1,9 +1,10 @@
-# Custom HPC image for Azure based on RHEL 7
+# Build your Custom HPC Image to be used with Microsoft Azure
 
 ## Tested with ...
 
 ```bash
 ~$ cat /etc/redhat-release
+Red Hat Enterprise Linux Server release 7.6 (Maipo)
 Red Hat Enterprise Linux Server release 7.7 (Maipo)
 ```
 
