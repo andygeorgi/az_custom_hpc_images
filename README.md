@@ -6,6 +6,8 @@
 ~$ cat /etc/redhat-release
 Red Hat Enterprise Linux Server release 7.6 (Maipo)
 Red Hat Enterprise Linux Server release 7.7 (Maipo)
+Red Hat Enterprise Linux Server release 7.8 (Maipo)
+Red Hat Enterprise Linux Server release 7.9 (Maipo)
 ```
 
 ```bash
