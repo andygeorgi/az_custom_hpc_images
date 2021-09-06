@@ -44,6 +44,13 @@
     {
         "type": "shell",
         "inline": [
+            "echo \"Install perl for Slurm\"",
+            "sudo yum install -y perl"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
             "echo \"Remove packages with conflicting versions\"",
             "sudo yum erase -y policycoreutils"
         ]
