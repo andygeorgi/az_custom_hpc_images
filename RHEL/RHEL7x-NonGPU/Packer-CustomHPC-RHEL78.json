@@ -20,8 +20,8 @@
         "baseosimg": "RedHat:RHEL:7.8:latest"
     },
 
-    "location": "westeurope",
-    "vm_size": "Standard_HB60rs"
+    "location": "{{user `location`}}",
+    "vm_size": "{{user `vmSize`}}"
   }],
   "provisioners": [
     {
