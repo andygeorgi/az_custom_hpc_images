@@ -32,11 +32,18 @@ Copyright (C) 2016 Free Software Foundation, Inc.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html
 ```
 
-## Login and set environment specific variables (to be customized to own needs)
+## Login and store subscription information
 
 ```bash
 az login
+
+# Save subscription name and ID
+subscriptionName=$(az account show --query id --output tsv)
+subscriptionID=$(az account show --query id --output tsv)
 ```
+
+##  Set environment specific variables (to be customized to own needs)
+
 ```bash
 # Destination image resource group
 imageResourceGroup="RGHPCImages"
@@ -44,18 +51,32 @@ imageResourceGroup="RGHPCImages"
 # Location (see possible locations in main docs)
 location="westeurope"
 
-# Your subscription name and ID
-subscriptionName=$(az account show --query id --output tsv)
-subscriptionID=$(az account show --query id --output tsv)
+# VM size used to build the image (H- or N-series recommended if building with IB and/or GPU support)
+vmSize="Standard_HB60rs"
 
 # Name of the Service Principal to be created
 servicePrincipalName="SPpacker"
 
-# Specify RHEL 7 minor version to be used (6|7)
-RHEL7MinorVersion=7
+# Distribution specific configuration
+# RHEL (CentOS and Ubuntu coming soon ...)
+Distribution=RHEL
 
-# Path for HPC scripts (see https://github.com/Azure/azhpc-images to get the right path for the selected image)
-HPCscripts="centos/centos-7.x/centos-7.${RHEL7MinorVersion}-hpc/"
+# Currently RHEL7 only
+MajorVersion=7
+
+# Currently RHEL 7.x with x=6|7|8|9
+MinorVersion=9
+
+# GPU support needed (true|false) - GPU support coming soon ...
+GPUSupport=false
+
+if $GPUSupport; then
+        echo "GPU support is available soon ..."
+else
+        workingDirectory="${Distribution}/${Distribution}${MajorVersion}x-NonGPU"
+fi
+
+packerFile="Packer-CustomHPC-${Distribution}${MajorVersion}${MinorVersion}.json"
 ```
 
 ## Preperation steps
@@ -79,12 +100,12 @@ servicePrincipalTenant=$(awk '{print $5}' SPpackerCredentials.out)
 
 ```bash
 packer build \
+  -var "location=$location" \
+  -var "vmSize=$vmSize" \
   -var "client_id=$servicePrincipalAppId" \
   -var "client_secret=$servicePrincipalPassword" \
   -var "tenant_id=$servicePrincipalTenant" \
   -var "subscription_id=$subscriptionID" \
   -var "resource_group=$imageResourceGroup" \
-  -var "HPCscripts=$HPCscripts" \
-  -var "RHEL7MinorVersion=$RHEL7MinorVersion" \
-  Packer-CustomHPC-RHEL7.json
+  ${workingDirectory}/${packerFile}
 ```
