@@ -1,10 +1,13 @@
-# Custom HPC image for Azure based on RHEL 7
+# Build your Custom HPC Image to be used with Microsoft Azure
 
 ## Tested with ...
 
 ```bash
 ~$ cat /etc/redhat-release
+Red Hat Enterprise Linux Server release 7.6 (Maipo)
 Red Hat Enterprise Linux Server release 7.7 (Maipo)
+Red Hat Enterprise Linux Server release 7.8 (Maipo)
+Red Hat Enterprise Linux Server release 7.9 (Maipo)
 ```
 
 ```bash
@@ -12,7 +15,7 @@ Red Hat Enterprise Linux Server release 7.7 (Maipo)
 CycleCloud 8.1.0-1275
 ```
 
-## Tools
+## Tools used ...
 ```bash
 ~$ az version
     {
@@ -59,7 +62,7 @@ servicePrincipalName="SPpacker"
 
 # Distribution specific configuration
 # RHEL (CentOS and Ubuntu coming soon ...)
-Distribution=RHEL
+Distribution="RHEL"
 
 # Currently RHEL7 only
 MajorVersion=7
