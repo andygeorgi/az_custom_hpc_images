@@ -37,15 +37,16 @@
     {
         "type": "shell",
         "inline": [
-            "echo \"Install EPEL release Repos\"",
-            "sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
+            "echo \"Enable Repos for EPEL and optional RPMs\"",
+            "sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm",
+            "sudo yum-config-manager --enable rhui-rhel-7-server-rhui-optional-rpms"
         ]
     },
     {
         "type": "shell",
         "inline": [
-            "echo \"Install perl for Slurm\"",
-            "sudo yum install -y perl"
+            "echo \"Install libnl3 and libnl3-devel required for rdma-core build as well as perl-Switch required for Slurm\"",
+            "sudo yum install -y libnl3 libnl3-devel perl-Switch"
         ]
     },
     {
