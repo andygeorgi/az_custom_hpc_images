@@ -1,20 +1,5 @@
 # Build your Custom HPC Image to be used with Microsoft Azure
 
-## Tested with ...
-
-```bash
-~$ cat /etc/redhat-release
-Red Hat Enterprise Linux Server release 7.6 (Maipo)
-Red Hat Enterprise Linux Server release 7.7 (Maipo)
-Red Hat Enterprise Linux Server release 7.8 (Maipo)
-Red Hat Enterprise Linux Server release 7.9 (Maipo)
-```
-
-```bash
-~$ cyclecloud --version
-CycleCloud 8.1.0-1275
-```
-
 ## Tools used ...
 ```bash
 ~$ az version
@@ -111,4 +96,24 @@ packer build \
   -var "subscription_id=$subscriptionID" \
   -var "resource_group=$imageResourceGroup" \
   ${workingDirectory}/${packerFile}
+```
+
+## Tested with ...
+
+```bash
+~$ cat /etc/redhat-release
+Red Hat Enterprise Linux Server release 7.6 (Maipo)
+Red Hat Enterprise Linux Server release 7.7 (Maipo)
+Red Hat Enterprise Linux Server release 7.8 (Maipo)
+Red Hat Enterprise Linux Server release 7.9 (Maipo)
+```
+
+```bash
+~$ cyclecloud --version
+CycleCloud 8.1.0-1275
+```
+
+```bash
+~$ slurmctld -V
+slurm 20.11.7
 ```
