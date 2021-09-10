@@ -52,6 +52,18 @@
     {
         "type": "shell",
         "inline": [
+            "echo \"Install Python 3 and symlink to /usr/bin\"",
+            "sudo yum install -y rh-python36",
+            "scl enable rh-python36 bash",
+            "PYTHON36_PATH=$(sudo find /opt/rh/ -ignore_readdir_race -type f -name \"python*\" | grep \"python3.6$\")",
+            "sudo ln -sf $(dirname ${PYTHON36_PATH})/python3* /usr/bin/",
+            "sudo ln -sf $(dirname ${PYTHON36_PATH})/pydoc3* /usr/bin/",
+            "sudo ln -sf $(dirname ${PYTHON36_PATH})/pyvenv-3* /usr/bin/"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
             "echo \"Remove packages with conflicting versions\"",
             "sudo yum erase -y policycoreutils"
         ]
