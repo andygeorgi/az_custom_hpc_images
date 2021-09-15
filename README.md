@@ -117,3 +117,10 @@ CycleCloud 8.1.0-1275
 ~$ slurmctld -V
 slurm 20.11.7
 ```
+
+```bash
+~$ qsub --version
+pbs_version = 18.1.4
+```
+
+
