@@ -1,0 +1,58 @@
+{
+  "builders": [{
+    "type": "azure-arm",
+
+    "client_id": "{{user `client_id`}}",
+    "client_secret": "{{user `client_secret`}}",
+    "tenant_id": "{{user `tenant_id`}}",
+    "subscription_id": "{{user `subscription_id`}}",
+    
+    "managed_image_resource_group_name": "{{user `resource_group`}}",
+    "managed_image_name": "AlmaLinux-8.4-HPCImage",
+
+    "os_type": "Linux",
+    "image_publisher": "almalinux",
+    "image_offer": "almalinux",
+    "image_sku": "8_4",
+    "plan_info": {
+        "plan_name": "8_4",
+        "plan_product": "almalinux",
+        "plan_publisher": "almalinux"
+    },
+
+    "azure_tags": {
+        "source": "PackerVmImageBuilder",
+        "baseosimg": "AlmaLinux:AlmaLinux:8_4:latest"
+    },
+
+    "location": "{{user `location`}}",
+    "vm_size": "{{user `vmSize`}}"
+  }],
+  "provisioners": [
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Install git\"",
+            "sudo yum install -y git"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Checkout HPC scripts and start installation in alma-8.4-hpc directory. Can take about 60 minutes to complete...\"",
+            "git clone https://github.com/andygeorgi/azhpc-images.git",
+            "cd azhpc-images",
+            "git checkout AlmaLinux",
+            "cd alma/alma-8.x/alma-8.4-hpc/",
+            "sudo ./install.sh"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Deprovision VM by deleting machine-specific files and data\"",
+            "sudo /usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+        ]
+    }
+]
+}
