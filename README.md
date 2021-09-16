@@ -1,4 +1,4 @@
-# Build your Custom HPC Image to be used with Microsoft Azure
+# Build your Custom HPC Image to be used on Microsoft Azure
 
 ## Tools used ...
 ```bash
