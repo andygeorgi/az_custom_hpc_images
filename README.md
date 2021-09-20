@@ -1,4 +1,4 @@
-# Build your Custom HPC Image to be used with Microsoft Azure
+# Build your Custom HPC Image to be used on Microsoft Azure
 
 ## Tools used ...
 ```bash
@@ -46,13 +46,15 @@ vmSize="Standard_HB60rs"
 servicePrincipalName="SPpacker"
 
 # Distribution specific configuration
-# RHEL (CentOS and Ubuntu coming soon ...)
+# RHEL, Alma (CentOS and Ubuntu coming soon ...)
 Distribution="RHEL"
 
-# Currently RHEL7 only
+# Currently RHEL 7.x or Alma 8.4 only
 MajorVersion=7
 
-# Currently RHEL 7.x with x=6|7|8|9
+# Currently:
+#   * RHEL 7.x with x=6|7|8|9
+#   * Alma 8.4
 MinorVersion=9
 
 # GPU support needed (true|false) - GPU support coming soon ...
@@ -122,5 +124,3 @@ slurm 20.11.7
 ~$ qsub --version
 pbs_version = 18.1.4
 ```
-
-
