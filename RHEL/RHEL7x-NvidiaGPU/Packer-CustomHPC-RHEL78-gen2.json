@@ -8,16 +8,16 @@
     "subscription_id": "{{user `subscription_id`}}",
     
     "managed_image_resource_group_name": "{{user `resource_group`}}",
-    "managed_image_name": "RedHat-RHEL-7.6-HPCGPUImage",
+    "managed_image_name": "RedHat-RHEL-7.8-gen2-HPCGPUImage",
 
     "os_type": "Linux",
     "image_publisher": "RedHat",
     "image_offer": "RHEL",
-    "image_sku": "7.6",
+    "image_sku": "78-gen2",
 
     "azure_tags": {
         "source": "PackerVmImageBuilder",
-        "baseosimg": "RedHat:RHEL:7.6:latest"
+        "baseosimg": "RedHat:RHEL:78-gen2:latest"
     },
 
     "location": "{{user `location`}}",
@@ -52,18 +52,6 @@
     {
         "type": "shell",
         "inline": [
-            "echo \"Install Python 3 and symlink to /usr/bin\"",
-            "sudo yum install -y rh-python36",
-            "scl enable rh-python36 bash",
-            "PYTHON36_PATH=$(sudo find /opt/rh/ -ignore_readdir_race -type f -name \"python*\" | grep \"python3.6$\")",
-            "sudo ln -sf $(dirname ${PYTHON36_PATH})/python3* /usr/bin/",
-            "sudo ln -sf $(dirname ${PYTHON36_PATH})/pydoc3* /usr/bin/",
-            "sudo ln -sf $(dirname ${PYTHON36_PATH})/pyvenv-3* /usr/bin/"
-        ]
-    },
-    {
-        "type": "shell",
-        "inline": [
             "echo \"Remove packages with conflicting versions\"",
             "sudo yum erase -y policycoreutils"
         ]
@@ -85,10 +73,10 @@
     {
         "type": "shell",
         "inline": [
-            "echo \"Start installation in centos-7.6-hpc. Can take about 60 minutes to complete...\"",
-            "cd azhpc-images/centos/centos-7.x/centos-7.6-hpc/",
+            "echo \"Start installation in centos-7.8-hpc. Can take about 60 minutes to complete...\"",
+            "cd azhpc-images/centos/centos-7.x/centos-7.8-hpc/",
             "sudo sed -i -e 's|.*./install_nvidiagpudriver.sh.*|./install_nvidiagpudriver.sh|g' install.sh",
-            "sudo ./install.sh  > stdout.out"
+            "sudo ./install.sh > stdout.out"
         ]
     },
     {

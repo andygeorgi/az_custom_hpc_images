@@ -8,16 +8,16 @@
     "subscription_id": "{{user `subscription_id`}}",
     
     "managed_image_resource_group_name": "{{user `resource_group`}}",
-    "managed_image_name": "RedHat-RHEL-7.9-HPCGPUImage",
+    "managed_image_name": "RedHat-RHEL-7.9-gen2-HPCGPUImage",
 
     "os_type": "Linux",
     "image_publisher": "RedHat",
     "image_offer": "RHEL",
-    "image_sku": "7_9",
+    "image_sku": "79-gen2",
 
     "azure_tags": {
         "source": "PackerVmImageBuilder",
-        "baseosimg": "RedHat:RHEL:7_9:latest"
+        "baseosimg": "RedHat:RHEL:79-gen2:latest"
     },
 
     "location": "{{user `location`}}",
