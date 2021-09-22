@@ -1,0 +1,114 @@
+{
+  "builders": [{
+    "type": "azure-arm",
+
+    "client_id": "{{user `client_id`}}",
+    "client_secret": "{{user `client_secret`}}",
+    "tenant_id": "{{user `tenant_id`}}",
+    "subscription_id": "{{user `subscription_id`}}",
+    
+    "managed_image_resource_group_name": "{{user `resource_group`}}",
+    "managed_image_name": "RedHat-RHEL-7.7-HPCGPUImage",
+
+    "os_type": "Linux",
+    "image_publisher": "RedHat",
+    "image_offer": "RHEL",
+    "image_sku": "7.7",
+
+    "azure_tags": {
+        "source": "PackerVmImageBuilder",
+        "baseosimg": "RedHat:RHEL:7.7:latest"
+    },
+
+    "location": "{{user `location`}}",
+    "vm_size": "{{user `vmSize`}}"
+  }],
+  "provisioners": [
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Extend Partitions for home and opt\"",
+            "sudo lvextend -L+10G /dev/rootvg/optlv",
+            "sudo xfs_growfs /dev/rootvg/optlv",
+            "sudo lvextend -L+10G /dev/rootvg/homelv",
+            "sudo xfs_growfs /dev/rootvg/homelv"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Enable Repos for EPEL and optional RPMs\"",
+            "sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm",
+            "sudo yum-config-manager --enable rhui-rhel-7-server-rhui-optional-rpms"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Install libnl3 and libnl3-devel required for rdma-core build as well as perl-Switch required for Slurm\"",
+            "sudo yum install -y libnl3 libnl3-devel perl-Switch"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Remove packages with conflicting versions\"",
+            "sudo yum erase -y policycoreutils"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Install git\"",
+            "sudo yum install -y git"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Checkout HPC scripts\"",
+            "git clone https://github.com/Azure/azhpc-images.git"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Start installation in centos-7.7-hpc. Can take about 60 minutes to complete...\"",
+            "cd azhpc-images/centos/centos-7.x/centos-7.7-hpc/",
+            "sudo sed -i -e 's|.*./install_nvidiagpudriver.sh.*|./install_nvidiagpudriver.sh|g' install.sh",
+            "sudo ./install.sh > stdout.out"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"RHEL specific fixes for generalization and image build process\"",
+            "echo network: {config: disabled} | sudo tee /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg",
+            "sudo mkdir -p /etc/netplan",
+            "echo \"Fixing 50-cloud-init.yaml ...\"",
+            "sudo bash -c \"cat > /etc/netplan/50-cloud-init.yaml\" <<'EOF'",
+            "network:",
+            "  ethernets:",
+            "    eth0:",
+            "      dhcp4: true",
+            "  version: 2",
+            "EOF",
+            "echo \"Fixing ifcfg-eth0 ...\"",
+            "sudo bash -c 'cat > /etc/sysconfig/network-scripts/ifcfg-eth0' <<'EOF'",
+            "DEVICE=eth0",
+            "BOOTPROTO=dhcp",
+            "ONBOOT=yes",
+            "EOF",
+            "echo \"Make sure OS.EnableRDMA is enabled in waagent config ...\"",
+            "sudo sed -i -e 's/# OS.EnableRDMA=y/OS.EnableRDMA=y/g' /etc/waagent.conf"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Deprovision VM by deleting machine-specific files and data\"",
+            "sudo /usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+        ]
+    }
+]
+}
