@@ -30,8 +30,10 @@
             "echo \"Extend Partitions for home and opt\"",
             "sudo lvextend -L+10G /dev/rootvg/optlv",
             "sudo xfs_growfs /dev/rootvg/optlv",
-            "sudo lvextend -L+10G /dev/rootvg/homelv",
-            "sudo xfs_growfs /dev/rootvg/homelv"
+            "sudo lvextend -L+20G /dev/rootvg/homelv",
+            "sudo xfs_growfs /dev/rootvg/homelv",
+            "sudo lvextend -L+8G /dev/mapper/rootvg-tmplv",
+            "sudo xfs_growfs /dev/mapper/rootvg-tmplv"
         ]
     },
     {
@@ -45,8 +47,8 @@
     {
         "type": "shell",
         "inline": [
-            "echo \"Install libnl3 and libnl3-devel required for rdma-core build as well as perl-Switch required for Slurm\"",
-            "sudo yum install -y libnl3 libnl3-devel perl-Switch"
+            "echo \"Install libnl3 and libnl3-devel required for rdma-core build, perl-Switch required for Slurm, as well as libglvnd-devel required for Nvidia GPU drivers\"",
+            "sudo yum install -y libnl3 libnl3-devel perl-Switch libglvnd-devel"
         ]
     },
     {
