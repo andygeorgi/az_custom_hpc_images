@@ -57,16 +57,19 @@ MajorVersion=7
 #   * Alma 8.4
 MinorVersion=9
 
+# VM generation (gen1|gen2)
+VMGen=gen2
+
 # GPU support needed (true|false) - GPU support coming soon ...
 GPUSupport=false
 
 if $GPUSupport; then
-        echo "GPU support is available soon ..."
+        workingDirectory="${Distribution}/${Distribution}${MajorVersion}x-NvidiaGPU"
 else
         workingDirectory="${Distribution}/${Distribution}${MajorVersion}x-NonGPU"
 fi
 
-packerFile="Packer-CustomHPC-${Distribution}${MajorVersion}${MinorVersion}.json"
+packerFile="Packer-CustomHPC-${Distribution}${MajorVersion}${MinorVersion}-${VMGen}.json"
 ```
 
 ## Preperation steps
