@@ -1,6 +1,7 @@
 # Build your Custom HPC Image to be used on Microsoft Azure
 
-## Tools used ...
+## Tools used
+
 ```bash
 ~$ az version
     {
@@ -9,10 +10,12 @@
       "azure-cli-telemetry": "1.0.6"
     }
 ```
+
 ```bash
 ~$ packer -v
     1.7.4
 ```
+
 ```bash
 ~$ bash --version
 GNU bash, version 4.4.20(1)-release (x86_64-pc-linux-gnu)
@@ -26,11 +29,11 @@ License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html
 az login
 
 # Save subscription name and ID
-subscriptionName=$(az account show --query id --output tsv)
+subscriptionName=$(az account show --query name --output tsv)
 subscriptionID=$(az account show --query id --output tsv)
 ```
 
-##  Set environment specific variables (to be customized to own needs)
+## Set environment specific variables (to be customized to own needs)
 
 ```bash
 # Destination image resource group
@@ -40,7 +43,7 @@ imageResourceGroup="RGHPCImages"
 location="westeurope"
 
 # VM size used to build the image (H- or N-series recommended if building with IB and/or GPU support)
-vmSize="Standard_HB60rs"
+vmSize="Standard_NC6s_v3"
 
 # Name of the Service Principal to be created
 servicePrincipalName="SPpacker"
@@ -58,10 +61,10 @@ MajorVersion=7
 MinorVersion=9
 
 # VM generation (gen1|gen2)
-VMGen=gen2
+VMGen=gen1
 
 # GPU support needed (true|false) - GPU support coming soon ...
-GPUSupport=false
+GPUSupport=true
 
 if $GPUSupport; then
         workingDirectory="${Distribution}/${Distribution}${MajorVersion}x-NvidiaGPU"
@@ -103,7 +106,7 @@ packer build \
   ${workingDirectory}/${packerFile}
 ```
 
-## Tested with ...
+## Tested with
 
 ```bash
 ~$ cat /etc/redhat-release
