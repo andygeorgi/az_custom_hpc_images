@@ -27,11 +27,13 @@
     {
         "type": "shell",
         "inline": [
-            "echo \"Extend Partitions for home and opt\"",
+            "echo \"Extend Partitions for home, opt and tmp\"",
             "sudo lvextend -L+10G /dev/rootvg/optlv",
             "sudo xfs_growfs /dev/rootvg/optlv",
-            "sudo lvextend -L+10G /dev/rootvg/homelv",
-            "sudo xfs_growfs /dev/rootvg/homelv"
+            "sudo lvextend -L+20G /dev/rootvg/homelv",
+            "sudo xfs_growfs /dev/rootvg/homelv",
+            "sudo lvextend -L+8G /dev/mapper/rootvg-tmplv",
+            "sudo xfs_growfs /dev/mapper/rootvg-tmplv"
         ]
     },
     {
