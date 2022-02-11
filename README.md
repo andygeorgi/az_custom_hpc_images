@@ -43,7 +43,7 @@ imageResourceGroup="RGHPCImages"
 location="westeurope"
 
 # VM size used to build the image (H- or N-series recommended if building with IB and/or GPU support)
-vmSize="Standard_NC6s_v3"
+vmSize="Standard_HB60rs"
 
 # Name of the Service Principal to be created
 servicePrincipalName="SPpacker"
@@ -64,7 +64,7 @@ MinorVersion=9
 VMGen=gen1
 
 # GPU support needed (true|false) - GPU support coming soon ...
-GPUSupport=true
+GPUSupport=false
 
 if $GPUSupport; then
         workingDirectory="${Distribution}/${Distribution}${MajorVersion}x-NvidiaGPU"
