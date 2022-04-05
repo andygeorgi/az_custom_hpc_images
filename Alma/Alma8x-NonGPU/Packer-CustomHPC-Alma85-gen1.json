@@ -8,21 +8,21 @@
     "subscription_id": "{{user `subscription_id`}}",
     
     "managed_image_resource_group_name": "{{user `resource_group`}}",
-    "managed_image_name": "AlmaLinux-8.4-HPCImage",
+    "managed_image_name": "AlmaLinux-8.5-gen1-HPCImage",
 
     "os_type": "Linux",
     "image_publisher": "almalinux",
     "image_offer": "almalinux",
-    "image_sku": "8_4",
+    "image_sku": "8_5",
     "plan_info": {
-        "plan_name": "8_4",
+        "plan_name": "8_5",
         "plan_product": "almalinux",
         "plan_publisher": "almalinux"
     },
 
     "azure_tags": {
         "source": "PackerVmImageBuilder",
-        "baseosimg": "AlmaLinux:AlmaLinux:8_4:latest"
+        "baseosimg": "AlmaLinux:AlmaLinux:8_5:latest"
     },
 
     "location": "{{user `location`}}",
@@ -56,11 +56,11 @@
     {
         "type": "shell",
         "inline": [
-            "echo \"Checkout HPC scripts and start installation in alma-8.4-hpc directory. Can take about 60 minutes to complete...\"",
-            "git clone https://github.com/andygeorgi/azhpc-images.git",
+            "echo \"Checkout HPC scripts and start installation in alma-8.5-hpc directory. Can take about 60 minutes to complete...\"",
+            "git clone https://github.com/andygeorgi/azhpc-images",
             "cd azhpc-images",
             "git checkout AlmaLinux",
-            "cd alma/alma-8.x/alma-8.4-hpc/",
+            "cd alma/alma-8.x/alma-8.5-hpc/",
             "sudo ./install.sh"
         ]
     },
