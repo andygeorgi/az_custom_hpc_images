@@ -59,7 +59,6 @@
             "echo \"Checkout HPC scripts and start installation in alma-8.5-hpc directory. Can take about 60 minutes to complete...\"",
             "git clone https://github.com/andygeorgi/azhpc-images",
             "cd azhpc-images",
-            "git checkout AlmaLinux",
             "cd alma/alma-8.x/alma-8.5-hpc/",
             "sudo ./install.sh"
         ]
