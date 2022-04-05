@@ -1,0 +1,99 @@
+{
+  "builders": [{
+    "type": "azure-arm",
+
+    "client_id": "{{user `client_id`}}",
+    "client_secret": "{{user `client_secret`}}",
+    "tenant_id": "{{user `tenant_id`}}",
+    "subscription_id": "{{user `subscription_id`}}",
+    
+    "managed_image_resource_group_name": "{{user `resource_group`}}",
+    "managed_image_name": "AlmaLinux-8.5-gen2-HPCImage",
+
+    "os_type": "Linux",
+    "image_publisher": "almalinux",
+    "image_offer": "almalinux",
+    "image_sku": "8_5-gen2",
+    "plan_info": {
+        "plan_name": "8_5-gen2",
+        "plan_product": "almalinux",
+        "plan_publisher": "almalinux"
+    },
+
+    "azure_tags": {
+        "source": "PackerVmImageBuilder",
+        "baseosimg": "AlmaLinux:AlmaLinux:8_5-gen2:latest"
+    },
+
+    "location": "{{user `location`}}",
+    "vm_size": "{{user `vmSize`}}"
+  }],
+  "provisioners": [
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Install git...\"",
+            "sudo yum install -y git"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Get latest updates...\"",
+            "sudo yum update -y"
+        ]
+    },
+    {
+        "type": "shell",
+        "expect_disconnect": true,
+        "pause_after": "2m",
+        "valid_exit_codes": [0, 2300218],
+        "inline": [
+            "echo \"Reboot in case there was a kernel update available\"",
+            "sudo reboot now"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Checkout HPC scripts and start installation in alma-8.5-hpc directory. Can take about 60 minutes to complete...\"",
+            "git clone https://github.com/andygeorgi/azhpc-images",
+            "cd azhpc-images",
+            "git checkout AlmaLinux",
+            "cd alma/alma-8.x/alma-8.5-hpc/",
+            "sudo ./install.sh"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Alma specific fixes for generalization and image build process\"",
+            "echo network: {config: disabled} | sudo tee /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg",
+            "sudo mkdir -p /etc/netplan",
+            "echo \"Fixing 50-cloud-init.yaml ...\"",
+            "sudo bash -c \"cat > /etc/netplan/50-cloud-init.yaml\" <<'EOF'",
+            "network:",
+            "  ethernets:",
+            "    eth0:",
+            "      dhcp4: true",
+            "  version: 2",
+            "EOF",
+            "echo \"Fixing ifcfg-eth0 ...\"",
+            "sudo bash -c 'cat > /etc/sysconfig/network-scripts/ifcfg-eth0' <<'EOF'",
+            "DEVICE=eth0",
+            "BOOTPROTO=dhcp",
+            "ONBOOT=yes",
+            "EOF",
+            "echo \"Make sure OS.EnableRDMA is enabled in waagent config ...\"",
+            "sudo sed -i -e 's/# OS.EnableRDMA=y/OS.EnableRDMA=y/g' /etc/waagent.conf"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Deprovision VM by deleting machine-specific files and data\"",
+            "sudo /usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+        ]
+    }
+]
+}
