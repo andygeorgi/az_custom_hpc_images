@@ -87,9 +87,9 @@ az group create -n $imageResourceGroup -l $location
 az ad sp create-for-rbac --name "http://$servicePrincipalName" --role Contributor --scopes /subscriptions/$subscriptionID --years 1 --output tsv > SPpackerCredentials.out
 
 # Grep information about the SP
-servicePrincipalPassword=$(awk '{print $4}' SPpackerCredentials.out)
+servicePrincipalPassword=$(awk '{print $3}' SPpackerCredentials.out)
 servicePrincipalAppId=$(awk '{print $1}' SPpackerCredentials.out)
-servicePrincipalTenant=$(awk '{print $5}' SPpackerCredentials.out)
+servicePrincipalTenant=$(awk '{print $4}' SPpackerCredentials.out)
 ```
 
 ## Start Packer build prcocess
