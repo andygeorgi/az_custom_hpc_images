@@ -84,7 +84,7 @@ az group create -n $imageResourceGroup -l $location
 
 ```bash
 # Create Service Principal and get password
-az ad sp create-for-rbac --name "http://$servicePrincipalName" --role Contributor --years 1 --output tsv > SPpackerCredentials.out
+az ad sp create-for-rbac --name "http://$servicePrincipalName" --role Contributor --scopes /subscriptions/$subscriptionID --years 1 --output tsv > SPpackerCredentials.out
 
 # Grep information about the SP
 servicePrincipalPassword=$(awk '{print $4}' SPpackerCredentials.out)
