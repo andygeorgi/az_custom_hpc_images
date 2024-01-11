@@ -43,7 +43,7 @@ imageResourceGroup="RGHPCImages"
 location="westeurope"
 
 # VM size used to build the image (H- or N-series recommended if building with IB and/or GPU support)
-vmSize="Standard_HB60rs"
+vmSize="Standard_HB120rs_v2"
 
 # Name of the Service Principal to be created
 servicePrincipalName="SPpacker"
