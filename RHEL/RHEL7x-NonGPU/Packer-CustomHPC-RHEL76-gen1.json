@@ -39,6 +39,20 @@
     {
         "type": "shell",
         "inline": [
+            "echo \"Switch to non-EUS repositories for EOL RHEL7\"",
+            "echo \"Remove the releasever file.\"",
+            "sudo rm /etc/yum/vars/releasever",
+            "echo \"Disable EUS repositories.\"",
+            "sudo yum --disablerepo='*' remove -y 'rhui-azure-rhel7-eus'",
+            "echo \"Add non-EUS repository.\"",
+            "sudo yum --config='https://rhelimage.blob.core.windows.net/repositories/rhui-microsoft-azure-rhel7.config' install -y rhui-azure-rhel7",
+            "echo \"Update your RHEL VM.\"",
+            "sudo yum update -y"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
             "echo \"Enable Repos for EPEL and optional RPMs\"",
             "sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm",
             "sudo yum-config-manager --enable rhui-rhel-7-server-rhui-optional-rpms"
