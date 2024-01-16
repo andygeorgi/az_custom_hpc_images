@@ -55,6 +55,23 @@
     {
         "type": "shell",
         "inline": [
+            "echo \"Get latest updates...\"",
+            "sudo yum update -y"
+        ]
+    },
+    {
+        "type": "shell",
+        "expect_disconnect": true,
+        "pause_after": "2m",
+        "valid_exit_codes": [0, 2300218],
+        "inline": [
+            "echo \"Reboot in case there was a kernel update available\"",
+            "sudo reboot now"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
             "echo \"Start installation in rhel-9.2-hpc. Can take about 90 minutes to complete...\"",
             "cd azhpc-images/rhel/rhel-9.x/rhel-9.2-hpc/",
             "sudo ./install.sh"
