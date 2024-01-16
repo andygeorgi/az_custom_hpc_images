@@ -1,0 +1,71 @@
+{
+  "builders": [{
+    "type": "azure-arm",
+
+    "client_id": "{{user `client_id`}}",
+    "client_secret": "{{user `client_secret`}}",
+    "tenant_id": "{{user `tenant_id`}}",
+    "subscription_id": "{{user `subscription_id`}}",
+    
+    "managed_image_resource_group_name": "{{user `resource_group`}}",
+    "managed_image_name": "RedHat-RHEL-9.2-gen2-HPCImage",
+
+    "os_type": "Linux",
+    "image_publisher": "RedHat",
+    "image_offer": "RHEL",
+    "image_sku": "92-gen2",
+
+    "azure_tags": {
+        "source": "PackerVmImageBuilder",
+        "baseosimg": "RedHat:RHEL:92-gen2:latest"
+    },
+
+    "location": "{{user `location`}}",
+    "vm_size": "{{user `vmSize`}}"
+  }],
+  "provisioners": [
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Extend Partitions for home, usr, root and tmp\"",
+            "sudo lvextend -L+10G /dev/mapper/rootvg-homelv",
+            "sudo xfs_growfs /dev/mapper/rootvg-homelv",
+            "sudo lvextend -L+10G /dev/mapper/rootvg-usrlv",
+            "sudo xfs_growfs /dev/mapper/rootvg-usrlv",
+            "sudo lvextend -L+12G /dev/mapper/rootvg-rootlv",
+            "sudo xfs_growfs /dev/mapper/rootvg-rootlv",
+            "sudo lvextend -L+8G /dev/mapper/rootvg-tmplv",
+            "sudo xfs_growfs /dev/mapper/rootvg-tmplv"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Install git\"",
+            "sudo yum install -y git"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Checkout HPC scripts\"",
+            "git clone https://github.com/andygeorgi/azhpc-images.git"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Start installation in rhel-9.2-hpc. Can take about 90 minutes to complete...\"",
+            "cd azhpc-images/rhel/rhel-9.x/rhel-9.2-hpc/",
+            "sudo ./install.sh"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+            "echo \"Deprovision VM by deleting machine-specific files and data\"",
+            "sudo /usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+        ]
+    }
+]
+}
