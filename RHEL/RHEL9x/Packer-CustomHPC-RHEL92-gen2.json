@@ -41,8 +41,17 @@
     {
         "type": "shell",
         "inline": [
+            "echo \"Get latest updates for current release...\"",
+            "sudo rm -rf /var/cache/dnf",
+            "sudo yum clean all",
+            "sudo yum --releasever=9.2 update -y"
+        ]
+    },
+    {
+        "type": "shell",
+        "inline": [
             "echo \"Install git\"",
-            "sudo yum install -y git"
+            "sudo yum --releasever=9.2 install -y git"
         ]
     },
     {
@@ -50,23 +59,6 @@
         "inline": [
             "echo \"Checkout HPC scripts\"",
             "git clone https://github.com/andygeorgi/azhpc-images.git"
-        ]
-    },
-    {
-        "type": "shell",
-        "inline": [
-            "echo \"Get latest updates...\"",
-            "sudo yum update -y"
-        ]
-    },
-    {
-        "type": "shell",
-        "expect_disconnect": true,
-        "pause_after": "2m",
-        "valid_exit_codes": [0, 2300218],
-        "inline": [
-            "echo \"Reboot in case there was a kernel update available\"",
-            "sudo reboot now"
         ]
     },
     {
